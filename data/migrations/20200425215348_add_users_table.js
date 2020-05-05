@@ -1,16 +1,27 @@
 
 exports.up = function(knex) {
-  return knex.schema.createTable("Users",Users=>{
-    Users.increments("id").index();
-    Users.string("username",50).notNullable().index();
-    Users.string("password",255).notNullable();
-    Users.email("email").notNullable();
-    Users.datetime("created_at");
-    Users.datetime("lastconnection_at");
+  return knex.schema.createTable("Roles",Roles=>{
+    Roles.increments("ID",1).index();
+    Roles.string("Role",32).notNullable();
+  }).createTable("Users",Users=>{
+    Users.increments("ID").index();
+    Users.string("Username",50).notNullable().index();
+    Users.string("Password",255).notNullable();
+    Users.string("Email").notNullable();
+    Users.datetime("Created_at");
+    Users.datetime("Lastconnection_at");
+    Users.integer("Role",1)
+      .notNullable()
+      .references("ID")
+      .inTable("Roles")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
     //Rol foreing key
   })
+
+  
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists("Users");
+  return knex.schema.dropTableIfExists("Users").dropTableIfExists("Roles");
 };
