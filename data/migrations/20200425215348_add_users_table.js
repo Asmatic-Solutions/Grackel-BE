@@ -1,9 +1,6 @@
 
 exports.up = function(knex) {
-  return knex.schema.createTable("Roles",Roles=>{
-    Roles.increments("ID",1).index();
-    Roles.string("Role",32).notNullable();
-  }).createTable("Users",Users=>{
+  return knex.schema.createTable("Users",Users=>{
     Users.increments("ID").index();
     Users.string("Username",50).notNullable().index();
     Users.string("Password",255).notNullable();
@@ -23,5 +20,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists("Users").dropTableIfExists("Roles");
+  return knex.schema.dropTableIfExists("Users");
 };
