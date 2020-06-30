@@ -9,11 +9,12 @@ module.exports = {
 
 function getUserByID(ID){
     return db("Users")
-    .where({ID})
-    .join("Roles", function(){
-        this.on("Users.Role", "=", "Roles.ID")
-    })
-    .select("*")
+        .join("Roles", function(){
+            this.on("Users.Role_ID", "=", "Roles.ID")
+        })
+        .where({"Users.ID":ID})
+        .select("Users.ID","Username", "Email", "Created_at", "Lastconnection_at", "Role")
+        .first()
 }
 
 function getUserBy(filter){
