@@ -34,7 +34,7 @@ function createUser(credentials){
     "Email":credentials.email,
     "Created_at":date,
     "Lastconnection_at":date,
-    "Role":1
+    "Role_ID":1
     }).then(data=>{
         return getIDByUsername(credentials.username)
     });
