@@ -27,6 +27,13 @@ router.post("/register",userValidation,(req,res)=>{
 
 //Login
 
+
+router.get("/aa",(req,res)=>{
+    Users.getUserByID(2).then(data=>{
+        console.log("DATADATA",data)
+    })
+})
+
 module.exports = router;
 
 function userValidation(req,res,next){

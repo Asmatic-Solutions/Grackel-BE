@@ -2,16 +2,28 @@ const db = require("../../data/db-config");
 module.exports = {
     getUserByID,
     getUserBy,
-    createUser
+    createUser,
+    getIDByUsername
 }
 
 
-function getUserByID(id){
-    return db("Users").where({"id":id}).select("*")
+function getUserByID(ID){
+    return db("Users")
+    .where({ID})
+    .join("Roles", function(){
+        this.on("Users.Role", "=", "Roles.ID")
+    })
+    .select("*")
 }
+
 function getUserBy(filter){
-    return db("Users").where(filter).select("Username")
+    return db("Users").where(filter).select("*")
 }
+
+function getIDByUsername(Username){
+    return db("Users").where({Username}).select("ID").first()
+}
+
 function createUser(credentials){
     console.log(credentials);
     const date = new Date().toISOString();
@@ -24,7 +36,7 @@ function createUser(credentials){
     "Lastconnection_at":date,
     "Role":1
     }).then(data=>{
-        return getUserBy({"Username":credentials.username}).first()
+        return getIDByUsername(credentials.username)
     });
     
 }
