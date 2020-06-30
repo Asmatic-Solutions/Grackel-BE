@@ -17,16 +17,17 @@ function getUserByID(ID){
         .first()
 }
 
-function getUserBy(filter){
-    return db("Users").where(filter).select("*")
-}
-
 function getIDByUsername(Username){
     return db("Users").where({Username}).select("ID").first()
 }
 
+function getUserBy(filter){
+    return db("Users").where(filter).select("*").first()
+}
+
+
+
 function createUser(credentials){
-    console.log(credentials);
     const date = new Date().toISOString();
     return db("Users")
     .insert(

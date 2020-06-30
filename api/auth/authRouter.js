@@ -4,32 +4,32 @@ const Users = require("./authModel");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-//Register
+
 router.post("/register",userValidation,(req,res)=>{
     const credentials = req.body;
-    Users.getUserBy({"Username":credentials.username}).then(({data})=>{
-        if(data){
-            res.status(202).send({message:"User already exists"})
+    Users.getUserBy({"Username":credentials.username}).then((data)=>{
+        if(data){ //Check if user already exists
+            res.status(202).send({message:"User already exists"}); 
         }else{
-            // Hash password
-            credentials.password = bcrypt.hashSync(credentials.password, process.env.ROUNDS || 8);
-            // Create new user and pass the hashed password
-            Users.createUser(credentials).then(data=>{
-                console.log("data",data)
+            credentials.password = bcrypt.hashSync(credentials.password, process.env.ROUNDS || 8); // Hash password
+            // Create new user with the updated credentials (hashed password)
+            Users.createUser(credentials).then(User=>{
+                Users.getUserByID(User.ID).then(data=>{
+                    data?res.status(201).json(data):res.status(500).json({message:"User was not created"})
+                })
             }).catch(error=>{
                 console.log(error);
+                res.status(500).json({message:"Couldnt create user",error})
             })
-
-            // Verify for errrors
-    }
+        }
     })
 })
 
 //Login
 
-
+//TEST ROUTE
 router.get("/aa",(req,res)=>{
-    Users.getUserByID(2).then(data=>{
+    Users.getUserByID("8").then(data=>{
         console.log("DATADATA",data)
     })
 })
@@ -37,8 +37,8 @@ router.get("/aa",(req,res)=>{
 module.exports = router;
 
 function userValidation(req,res,next){
-    if(!(req.body.username)||!(req.body.password)){
-        return res.status(403).send({message:"Please make sure to provide both username and password"});
+    if(!(req.body.username)||!(req.body.password)||!(req.body.email)){
+        return res.status(403).send({message:"Please make sure to provide username, password and email"});
     }
     next();
 }
