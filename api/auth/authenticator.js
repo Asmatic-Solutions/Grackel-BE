@@ -1,17 +1,14 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const secret = require("./secrets").secret
 
 module.exports = (req,res,next) => {
     const token = req.headers.authorization;
-    console.log("Secret" , process.env.SECRET)
-    jwt.verify(token, process.env.SECRET || "nene", (err,decoded)=>{
+    console.log("Secret" , secret)
+    jwt.verify(token, secret, (err,decoded)=>{
         if(err){
             console.log(err);
             return res.status(401).json ({message:"Not Authorized"})
         }
         next();
     })
-
-
-
 }
