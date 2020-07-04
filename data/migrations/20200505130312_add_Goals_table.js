@@ -5,6 +5,7 @@ exports.up = function(knex) {
         Goals.integer("Goal",4).notNullable();
         Goals.integer("User_ID")
           .notNullable()
+          .unique()
           .references("ID")
           .inTable("Users")
           .onUpdate("CASCADE")
