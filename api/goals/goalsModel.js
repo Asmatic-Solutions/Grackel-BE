@@ -10,8 +10,8 @@ function createGoal(Goal,User_ID){
         return getGoal(User_ID);
     });
 }
-function deleteGoal(ID){
-    return db("Goals").delete().where({ID});
+function deleteGoal(User_ID){
+    return db("Goals").del().where({User_ID});
 }
 
 function getGoal(User_ID){
