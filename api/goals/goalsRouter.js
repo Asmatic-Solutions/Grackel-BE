@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const secret = require("../auth/secrets").secret;
 const db = require("../../data/db-config");
 const Goals = require("./goalsModel");
+const { getGoal } = require("./goalsModel");
 
 //Create new goal
 router.post("/",goalVerification,(req,res)=>{ 
@@ -22,16 +23,20 @@ router.post("/",goalVerification,(req,res)=>{
 })
 
 //Delete goal
-router.post("/",(req,res)=>{
-    if(!(req.body.goal_ID)){
-        return res.status(403).json({Message:"Please provide goal_ID"});
-    }
-
-
-    //Check if goals exists
-
-    //Delete goal duh
-
+router.delete("/",(req,res)=>{
+    getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
+        Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
+            if(data)    
+                Goals.deleteGoal(ID).then(()=>{
+                    res.status(200).json({message:"Removed goal succesfully"})
+                }).catch(err=>{
+                    console.log(err);
+                    res.status(500).json({message:"Error deleting goal"})
+                })
+            else
+                res.status(200).json({Message:"User doesnt have any goal set up"})
+        }) 
+    })
 })
 
 
