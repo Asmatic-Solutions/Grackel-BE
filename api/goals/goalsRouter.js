@@ -5,6 +5,8 @@ const db = require("../../data/db-config");
 const Goals = require("./goalsModel");
 const { getGoal } = require("./goalsModel");
 
+/* Goals endpoints */
+
 //CREATE new goal
 router.post("/",goalValidation,(req,res)=>{ 
     getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
@@ -67,14 +69,8 @@ router.get("/",(req,res)=>{
     })
 })
 
+/* Daily endpoints */
 
-//Get Goal
-
-//Update Goal
-
-//Update daily goal
-
-//Retrieve daily goal
 
 
 //TEST ROUTE
@@ -83,14 +79,13 @@ router.get("/aa",(req,res)=>{
         console.log("goal",goal)
     });
 })
-
 module.exports = router;
 
 function goalValidation(req,res,next){
     if(!(req.body.goal)){
         return res.status(403).json({message:"Please provide goal"});
     }
-    if(req.body.goal>9999||req.body.goal<1000){
+    if(req.body.goal>9999||req.body.goal<1000){ //This numbers should be determined by the health information of the individual
         return res.status(200).json({message:"Goal is not valid"})
     }
     next();
