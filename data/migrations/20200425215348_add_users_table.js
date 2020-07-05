@@ -7,13 +7,13 @@ exports.up = function(knex) {
     Users.string("Email").notNullable();
     Users.datetime("Created_at");
     Users.datetime("Lastconnection_at");
+    Users.integer("Goal",4).defaultsTo(2000);
     Users.integer("Role_ID",1)
       .notNullable()
       .references("ID")
       .inTable("Roles")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-    //Role foreing key
   })
 
   
