@@ -44,7 +44,7 @@ router.delete("/",(req,res)=>{
 router.put("/",goalValidation,(req,res)=>{
     getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
         Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
-            if(data)    
+            if(data!=null)    
                 Goals.updateGoal(ID,req.body.goal).then(goal=>{
                     res.status(200).json({message:"Updated goal succesfully",goal})
                 }).catch(err=>{
@@ -60,8 +60,8 @@ router.put("/",goalValidation,(req,res)=>{
 //GET Goal
 router.get("/",(req,res)=>{
     getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
-            if(data==null)    
+        Goals.getGoal(ID).then((data)=>{ //Check if the ID already has a goal set up
+            if(data.Goal!=null)    
                 res.status(200).json(data);
             else
                 res.status(200).json({Message:"No goal data was found linked with the specified ID"})
