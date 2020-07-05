@@ -14,7 +14,6 @@ exports.up = function(knex) {
       .inTable("Roles")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-    //Role foreing key
   })
 
   
