@@ -61,7 +61,7 @@ router.put("/",goalValidation,(req,res)=>{
 router.get("/",(req,res)=>{
     getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
         Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
-            if(data)    
+            if(data==null)    
                 res.status(200).json(data);
             else
                 res.status(200).json({Message:"No goal data was found linked with the specified ID"})
