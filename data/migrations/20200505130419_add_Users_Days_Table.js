@@ -8,7 +8,7 @@ exports.up = function(knex) {
           .onUpdate("CASCADE")
           .onDelete("CASCADE");
         User_Days.date("Date").notNullable();
-        User_Days.boolean("Success").defaultsTo(false);
+        User_Days.boolean("Success").defaultsTo(true);
         User_Days.integer("DailyCount",4).defaultsTo(0);
         User_Days.primary(["User_ID","Date"]); //Sets a composite key with Date and GoalID
       })

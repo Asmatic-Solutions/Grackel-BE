@@ -43,7 +43,6 @@ function createDaily(User_ID){
         "Date":date,
     }).then(()=>{
         return getDaily(User_ID).then(data=>{
-            console.log("Newuser",data);
             return data;
         });
     })
@@ -52,20 +51,20 @@ function createDaily(User_ID){
 function addDaily(User_ID,DailyCount){
     return getDaily(User_ID).then(data=>{
         if(data){ //Check if there is data for that User_ID
-            return updateGoal(data, DailyCount);
+            return updateDaily(data, DailyCount);
         }else{
             return createDaily(User_ID).then(newdata=>{
-                return updateGoal(newdata, DailyCount);
+                return updateDaily(newdata, DailyCount);
             });
         }
     })
 }
 
-function updateGoal(data, DailyCount){
+function updateDaily(data, DailyCount){
     return getGoal(data.User_ID).then(({Goal})=>{ // Get goal from the user.
         data.DailyCount += DailyCount; // Updates the daily count with the one passed by the user
-        if(Goal<DailyCount){
-            console.log("Updated goal just now")
+        console.log(Goal,DailyCount);
+        if(Goal<data.DailyCount){
             data.Success = false; //Checks if goal has been reached
         }
         return db("User_Days").where({"User_ID":data.User_ID,"Date":data.Date}).update(data).then(()=>{

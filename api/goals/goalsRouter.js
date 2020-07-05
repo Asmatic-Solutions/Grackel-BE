@@ -97,19 +97,12 @@ router.get("/daily",(req,res)=>{
 
 router.post("/daily",dailyValidation,(req,res)=>{ //This is basically updating the daily goal aka adding to the total
     getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        Goals.getDaily(ID).then(data=>{
-            if(data)
-                Goals.addDaily(ID, req.body.count).then(data=>{
-                    res.status(201).json(data)
-                }).catch(err=>{
-                    console.log(err)
-                    res.status(500).json({message:"Error updating daily goal"})
-                })
-            else
-                res.status(404).json({message:"User hasnt set up his goal yet"})
-        })
-
-        
+        Goals.addDaily(ID, req.body.count).then(data=>{
+            res.status(201).json(data)
+        }).catch(err=>{
+            console.log(err)
+            res.status(500).json({message:"Error updating daily goal"})
+        }) 
     })
 })
 

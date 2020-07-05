@@ -4,7 +4,7 @@ exports.seed = function(knex) {
   return knex('Users').del()
     .then(function () {
       // Inserts seed entries
-      const date = new Date().toISOString;
+      const date = new Date().toISOString();
       return knex('Users').insert([
         {
         "ID":1,
