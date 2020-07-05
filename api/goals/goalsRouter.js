@@ -75,12 +75,8 @@ router.get("/",(req,res)=>{
 /* Daily endpoints */
 router.get("/daily",(req,res)=>{
     getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
-            if(data){ // check if user has a goal set up
-                console.log(data.ID);
-            }
-            else
-                res.status(200).json({Message:"No goal data was found linked with the specified ID"})
+        Goals.getDaily(ID).then(data=>{
+            console.log(data);
         })
     })
 })

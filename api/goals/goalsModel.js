@@ -6,7 +6,6 @@ module.exports = {
     updateGoal,
     getDaily,
     createDaily,
-    deleteDaily,
     updateDaily,
 }
 
@@ -44,15 +43,10 @@ function createDaily(User_ID){
     })
 }
 
-function addDaily(User_ID,DailyCount){
+function addDaily(ID,DailyCount){
 
 }
 
-
-function deleteDaily(User_ID,DailyCount){
-
-}
-
-function updateDaily(User_ID,DailyCount){
-
+function updateDaily(ID,DailyCount){
+    
 }
