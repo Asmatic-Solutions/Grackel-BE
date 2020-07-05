@@ -65,19 +65,48 @@ router.get("/",(req,res)=>{
                 res.status(200).json(data);
             else
                 res.status(200).json({Message:"No goal data was found linked with the specified ID"})
-        }) 
+        }).catch(err=>{
+            console.log(err);
+            res.status(500).json({message:"Error retrieving goal"})
+        })
     })
 })
 
 /* Daily endpoints */
+router.get("/daily",(req,res)=>{
+    getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
+        Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
+            if(data){ // check if user has a goal set up
+                console.log(data.ID);
+            }
+            else
+                res.status(200).json({Message:"No goal data was found linked with the specified ID"})
+        })
+    })
+})
+
+router.post("/daily",dailyValidation,(req,res)=>{
+
+})
+
+router.delete("/daily",dailyValidation,(req,res)=>{
+
+})
+
+router.put("/daily",dailyValidation,(req,res)=>{
+
+})
+
+
+
 
 
 
 //TEST ROUTE
 router.get("/aa",(req,res)=>{
-    Goals.getGoal(1).then(goal=>{
-        console.log("goal",goal)
-    });
+    Goals.createDaily(1,124).then(data=>{
+        console.log(data);
+    })
 })
 module.exports = router;
 
@@ -90,6 +119,17 @@ function goalValidation(req,res,next){
     }
     next();
 }
+
+function dailyValidation(req,res,next){
+    if(!(req.body.count)){
+        return res.status(403).json({message:"Please provide a daily count to add"});
+    }
+    if(req.body.goal>5000){ // What is the highest calorie intake a user should take before health problems...
+        return res.status(200).json({message:"Daily value is not valid"})
+    }
+    next();
+}
+
 
 function getIDbyusername(token){
     const {username} = jwt.verify(token,secret);

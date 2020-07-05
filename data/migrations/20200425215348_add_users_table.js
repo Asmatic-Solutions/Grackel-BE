@@ -7,6 +7,7 @@ exports.up = function(knex) {
     Users.string("Email").notNullable();
     Users.datetime("Created_at");
     Users.datetime("Lastconnection_at");
+    Users.integer("Goal",4);
     Users.integer("Role_ID",1)
       .notNullable()
       .references("ID")
