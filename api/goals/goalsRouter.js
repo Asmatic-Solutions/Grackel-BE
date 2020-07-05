@@ -11,7 +11,7 @@ const { getGoal } = require("./goalsModel");
 router.post("/",goalValidation,(req,res)=>{ 
     getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
         Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
-            if(data)
+            if(data.goal!=null)
                 res.status(200).json({Message:"Goals has already been set"})
             else
                 Goals.createGoal(req.body.goal,ID).then(goal=>{ // Pass the ID and the goal

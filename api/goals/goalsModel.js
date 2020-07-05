@@ -11,13 +11,13 @@ module.exports = {
 }
 
 function createGoal(Goal,ID){
-    return db("Users").where({ID}).update(Goal).then(()=>{
-        return getGoal(User_ID);
+    return db("Users").where({ID}).update({Goal}).then(()=>{
+        return getGoal(ID);
     });
 }
 
 function deleteGoal(ID){
-    return db("Users").where({User_ID}).update({"Goal":0});
+    return db("Users").where({ID}).update({"Goal":0});
 }
 
 function updateGoal(ID,Goal){
