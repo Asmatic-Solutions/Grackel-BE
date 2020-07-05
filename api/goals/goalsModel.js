@@ -10,24 +10,24 @@ module.exports = {
     updateDaily,
 }
 
-function createGoal(Goal,User_ID){
-    return db("Goals").insert({Goal, User_ID}).then(()=>{
+function createGoal(Goal,ID){
+    return db("Users").where({ID}).update(Goal).then(()=>{
         return getGoal(User_ID);
     });
 }
 
-function deleteGoal(User_ID){
-    return db("Goals").del().where({User_ID});
+function deleteGoal(ID){
+    return db("Users").where({User_ID}).update({"Goal":0});
 }
 
-function updateGoal(User_ID,Goal){
-    return db("Goals").update({Goal}).where({User_ID}).then(()=>{
-        return getGoal(User_ID);
+function updateGoal(ID,Goal){
+    return db("Users").update({Goal}).where({ID}).then(()=>{
+        return getGoal(ID);
     });
 }
 
-function getGoal(User_ID){
-    return db("Goals").select("*").where({User_ID}).first();
+function getGoal(ID){
+    return db("Users").select("Goal").where({ID}).first();
 }
 
 //Daily functions
@@ -36,10 +36,10 @@ function getDaily(User_ID){
     return db("User_Days").select("*").where(User_ID);
 }
 
-function createDaily(Goal_ID){
+function createDaily(User_ID){
     const date = new Date().toISOString();
     return db("User_Days").insert({
-        Goal_ID,
+        User_ID,
         "Date":date,
     })
 }
