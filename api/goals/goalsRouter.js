@@ -6,14 +6,11 @@ const Goals = require("./goalsModel");
 const { getGoal } = require("./goalsModel");
 
 
-
-
 //BIG TODO! 
 /**
  * Find a way to verify if the goal exists
  * This way we save around 20 lines of code.
  * */ 
-
 
 /* Goals endpoints */
 
@@ -24,8 +21,8 @@ router.post("/",goalValidation,(req,res)=>{
             if(data.goal!=null)
                 res.status(200).json({Message:"Goals has already been set"})
             else
-                Goals.createGoal(req.body.goal,ID).then(goal=>{ // Pass the ID and the goal
-                    res.status(201).json({message:"Goal created succesfully",goal})
+                Goals.createGoal(req.body.goal,ID).then(({Goal})=>{ // Pass the ID and the goal
+                    res.status(201).json({message:"Goal created succesfully",Goal})
                 }).catch(err=>{
                     console.log(err);
                     res.status(500).json({message:"Error creating goal"})
