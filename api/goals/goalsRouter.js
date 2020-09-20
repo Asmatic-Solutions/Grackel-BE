@@ -86,8 +86,14 @@ router.get("/daily",(req,res)=>{
         Goals.getDaily(ID).then(data=>{
             if(data)
                 res.status(200).json(data);
-            else
-                res.status(404).json({message:"No daily information found for that user"})
+            else{
+                Goals.addDaily(ID,0).then(data=>{
+                    res.status(201).json(data)
+                }).catch(err=>{
+                    console.log(err)
+                    res.status(500).json({message:"Error creating daily goal"})
+                }) 
+            }
         })
     })
 })
