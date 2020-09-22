@@ -87,12 +87,7 @@ router.get("/daily",(req,res)=>{
             if(data)
                 res.status(200).json(data);
             else{
-                Goals.addDaily(ID,0).then(data=>{
-                    res.status(201).json(data)
-                }).catch(err=>{
-                    console.log(err)
-                    res.status(500).json({message:"Error creating daily goal"})
-                }) 
+                return addDaily(ID,req.body.count) 
             }
         })
     })
@@ -100,12 +95,7 @@ router.get("/daily",(req,res)=>{
 
 router.post("/daily",dailyValidation,(req,res)=>{ //This is basically updating the daily goal aka adding to the total
     getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        Goals.addDaily(ID, req.body.count).then(data=>{
-            res.status(201).json(data)
-        }).catch(err=>{
-            console.log(err)
-            res.status(500).json({message:"Error updating daily goal"})
-        }) 
+        return addDaily(ID,req.body.count)
     })
 })
 
@@ -143,6 +133,15 @@ function getIDbyusername(token){
     const {username} = jwt.verify(token,secret);
     return db("Users").select("ID").where({"Username":username}).first().then((id)=>{
         return id;
+    })
+}
+
+function addDaily(ID,count){
+    Goals.addDaily(ID, count).then(data=>{
+        res.status(201).json(data)
+    }).catch(err=>{
+        console.log(err)
+        res.status(500).json({message:"Error updating daily goal"})
     })
 }
 
