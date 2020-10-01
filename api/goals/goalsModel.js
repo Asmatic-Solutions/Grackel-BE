@@ -63,7 +63,6 @@ function addDaily(User_ID,DailyCount){
 function updateDaily(data, DailyCount){
     return getGoal(data.User_ID).then(({Goal})=>{ // Get goal from the user.
         data.DailyCount += DailyCount; // Updates the daily count with the one passed by the user
-        console.log(Goal,DailyCount);
         if(Goal<data.DailyCount){
             data.Success = false; //Checks if goal has been reached
         }
