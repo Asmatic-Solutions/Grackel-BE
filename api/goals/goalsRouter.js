@@ -136,7 +136,7 @@ function getIDbyusername(token){
     })
 }
 
-function addDaily(ID,count){
+function addDaily(ID,count,res){
     Goals.addDaily(ID, count).then(data=>{
         return res.status(201).json(data)
     }).catch(err=>{
