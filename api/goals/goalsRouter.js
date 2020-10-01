@@ -99,15 +99,7 @@ router.post("/daily",dailyValidation,(req,res)=>{ //This is basically updating t
     })
 })
 
-//TEST ROUTE
-router.get("/aa",(req,res)=>{
-    Goals.getDaily(2,"2020-07-05").then(data=>{
-        console.log("send",data);
-    })
-    res.status(404).json({message:"that user"})
-})
 module.exports = router;
-
 function goalValidation(req,res,next){
     if(!(req.body.goal)){
         return res.status(403).json({message:"Please provide goal"});
