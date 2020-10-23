@@ -33,10 +33,6 @@ exports.seed = function(knex) {
         "Lastconnection_at":date,
         "Role_ID":2
         },
-
-
-
-        
       ]);
     });
 };

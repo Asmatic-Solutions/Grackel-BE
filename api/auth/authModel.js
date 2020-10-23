@@ -6,7 +6,6 @@ module.exports = {
     getIDByUsername
 }
 
-
 function getUserByID(ID){
     return db("Users")
         .join("Roles", function(){
@@ -24,8 +23,6 @@ function getIDByUsername(Username){
 function getUserBy(filter){
     return db("Users").where(filter).select("*").first()
 }
-
-
 
 function createUser(credentials){
     const date = new Date().toISOString();
