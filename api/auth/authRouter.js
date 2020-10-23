@@ -58,7 +58,7 @@ function generateToken(user){
         email:user.Email,
     }
     const options = {
-        expiresIn:"7d"
+        expiresIn:"1d"
     }
     return jwt.sign(payload,secret, options)
 }
