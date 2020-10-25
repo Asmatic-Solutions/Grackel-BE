@@ -14,6 +14,8 @@ function createManualMeal(meal){
 function getLastMeal(User_ID){
     return db("Meals_Users").orderBy("Date","desc").select("*").where({User_ID}).limit(1).first().then(data=>{
         // Check if its manual mode, if so simply return data
+        if (!data.Manual)
+            console.log("Not manual mode not yet implemented")
         return data
     })
 }
