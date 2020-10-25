@@ -1,20 +1,26 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
+const secret = require("../auth/secrets").secret;
+const db = require("../../data/db-config");
+const Meals = require("./MealsModel");
 
 router.post("/",mealValidation,(req,res)=>{
-    // Add current date to the obj
-    // Link with user ID
-
-
-    // Create meal based on req
-    // Check if manual mode is active
-        // Ignore the verification of Meals_Products [DB products]
-        // Save the custom products and that's it return 201
-    // Else [STRETCH]
+    let meal = req.body;
+    getIDbyusername(req.headers.authorization).then(({ID})=>{
+        meal = {User_ID:ID,...meal}
+        if(meal.Manual) // Check if manual mode is active
+            // Ignore the verification of Meals_Products [DB products] and simply add the meals
+            Meals.createManualMeal(meal).then(data=>{
+                if(data)
+                    return res.status(201).json(data)
+            }).catch(err=>{
+                console.log("err",err)
+            })
+        else // Else [STRETCH]
         // Write current meal ID on Product_Meals
         // Write custom products 
-
-    return res.status(201).json("MEALS WORKS GOOD")
+            console.log("Not manual mode not yet implemented")
+    })
 })
 
 router.get("/",(req,res)=>{
@@ -30,16 +36,16 @@ router.get("/",(req,res)=>{
 module.exports = router;
 
 function mealValidation(req,res,next){
-    if(!(req.body.type))
+    if(!(req.body.Type))
         return res.status(403).json({message:"Missing type of meal"})
     
-        if(req.body.manual){ // Verify manual meal mode
-            if (!(req.body.manual_Ingredients) || req.body.manual_Ingredients.length<=0) // Check for manual_Ingredients array
+        if(req.body.Manual){ // Verify manual meal mode
+            if (!(req.body.Manual_Ingredients) || req.body.Manual_Ingredients.length<=0) // Check for manual_Ingredients array
                 return res.status(403).json({message:"Missing manual ingredients array or array is empty"})
 
-            const {manual_Ingredients} = req.body
+            const {Manual_Ingredients} = req.body
             // Check for good format on manual ingredients
-            manual_Ingredients.forEach(ingredient => {
+            Manual_Ingredients.forEach(ingredient => {
                 if (!(ingredient.name))
                     return res.status(403).json({message:"Manual ingredients must have a name"})
             });  
