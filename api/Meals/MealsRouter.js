@@ -35,6 +35,18 @@ router.get("/",(req,res)=>{
     })
 })
 
+router.get("/on",(req,res)=>{
+    const {date} = req.query
+    getIDbyusername(req.headers.authorization).then(({ID})=>{
+            Meals.getMealOn(ID,date).then(data=>{
+                res.status(200).json(data)
+            }).catch(err=>{
+                console.log(err)
+                res.status(500).json(err)
+            })
+    })
+})
+
 module.exports = router;
 
 function mealValidation(req,res,next){
