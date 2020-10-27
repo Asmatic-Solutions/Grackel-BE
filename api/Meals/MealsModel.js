@@ -1,6 +1,7 @@
 const db = require("../../data/db-config");
 module.exports = {
-    createManualMeal
+    createManualMeal,
+    getLastMealsFrom,
 }
 
 function createManualMeal(meal){
@@ -19,9 +20,13 @@ function getLastMeal(User_ID){
         return data
     })
 }
-
-
-
+function getLastMealsFrom(User_ID,time=1,timePeriod="week"){
+    return db("Meals_Users").select("*")
+    .where(db.raw(`\"Date\" > now() - interval '${time} ${timePeriod}'`))
+    .andWhere({User_ID}).then(data=>{
+        return data
+    })
+}
 
 function convertManualIngredients(Ingredients){
 
