@@ -24,14 +24,16 @@ router.post("/",mealValidation,(req,res)=>{
 })
 
 router.get("/",(req,res)=>{
-    return res.status(201).json("MEALS WORKS GOOD")
-    // Check if manual mode is active
-        // Ignore Meals_Products
-        // Retrieve the current meal
-    // Else [STRETCH]   
-        // Get all references of current id from Meals_Products
+    const {time,timeperiod} = req.query
+    getIDbyusername(req.headers.authorization).then(({ID})=>{
+            Meals.getLastMealsFrom(ID,time,timeperiod).then(data=>{
+                res.status(200).json(data)
+            }).catch(err=>{
+                console.log(err)
+                res.status(500).json(err)
+            })
+    })
 })
-
 
 module.exports = router;
 
