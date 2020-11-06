@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const secret = require("../auth/secrets").secret;
 const db = require("../../data/db-config");
 const Goals = require("./goalsModel");
-const { getGoal } = require("./goalsModel");
 
 
 //BIG TODO! 
