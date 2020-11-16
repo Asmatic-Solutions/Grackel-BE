@@ -10,7 +10,7 @@ exports.up = function(knex) {
         users_days.date("date").notNullable();
         users_days.boolean("success").defaultsTo(true);
         users_days.integer("daily_count",4).defaultsTo(0);
-        users_days.primary(["user_ID","Date"]); //Sets a composite key with Date and GoalID
+        users_days.primary(["user_id","date"]); //Sets a composite key with Date and GoalID
       })
 };
 

@@ -9,7 +9,7 @@ exports.up = function(knex) {
       meals_users.integer("user_id")
       .notNullable()
       .references("id")
-      .inTable("Users")
+      .inTable("users")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
     })
