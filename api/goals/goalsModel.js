@@ -9,51 +9,51 @@ module.exports = {
     addDaily,
 }
 
-function createGoal(Goal,ID){
-    return db("Users").where({ID}).update({Goal}).then(()=>{
-        return getGoal(ID);
+function createGoal(goal,id){
+    return db("users").where({id}).update({goal}).then(()=>{
+        return getGoal(id);
     });
 }
 
-function deleteGoal(ID){
-    return db("Users").where({ID}).update({"Goal":0});
+function deleteGoal(id){
+    return db("users").where({id}).update({"goal":0});
 }
 
-function updateGoal(ID,Goal){
-    return db("Users").update({Goal}).where({ID}).then(()=>{
-        return getGoal(ID);
+function updateGoal(id,goal){
+    return db("users").update({goal}).where({id}).then(()=>{
+        return getGoal(id);
     });
 }
 
-function getGoal(ID){
-    return db("Users").select("Goal").where({ID}).first();
+function getGoal(id){
+    return db("users").select("goal").where({id}).first();
 }
 
 
 //Daily functions
 
-function getDaily(User_ID, date = new Date().toISOString().substring(0, 10)){ //If no date is provided it will fetch the current date.
-    return db("User_Days").select("*").where({User_ID, "Date":date}).first();
+function getDaily(user_id, date = new Date().toISOString().substring(0, 10)){ //If no date is provided it will fetch the current date.
+    return db("users_days").select("*").where({user_id, date}).first();
 }
 
-function createDaily(User_ID){
+function createDaily(user_id){
     const date = new Date().toISOString();
-    return db("User_Days").insert({
-        User_ID,
-        "Date":date,
+    return db("users_days").insert({
+        user_id,
+        date,
     }).then(()=>{
-        return getDaily(User_ID).then(data=>{
+        return getDaily(user_id).then(data=>{
             return data;
         });
     })
 }
 
-function addDaily(User_ID,DailyCount){
-    return getDaily(User_ID).then(data=>{
-        if(data){ //Check if there is data for that User_ID
+function addDaily(user_id,DailyCount){
+    return getDaily(user_id).then(data=>{
+        if(data){ //Check if there is data for that User_id
             return updateDaily(data, DailyCount);
         }else{
-            return createDaily(User_ID).then(newdata=>{
+            return createDaily(user_id).then(newdata=>{
                 return updateDaily(newdata, DailyCount);
             });
         }
@@ -61,13 +61,18 @@ function addDaily(User_ID,DailyCount){
 }
 
 function updateDaily(data, DailyCount){
-    return getGoal(data.User_ID).then(({Goal})=>{ // Get goal from the user.
-        data.DailyCount += DailyCount; // Updates the daily count with the one passed by the user
-        if(Goal<data.DailyCount){
-            data.Success = false; //Checks if goal has been reached
+
+    const {user_id,date} = data;
+
+    return getGoal(user_id).then(({goal})=>{ // Get goal from the user.
+        data.daily_count += DailyCount; // Updates the daily count with the one passed by the user
+        if(goal<data.daily_count){
+            data.success = false; //Checks if goal has been reached
         }
-        return db("User_Days").where({"User_ID":data.User_ID,"Date":data.Date}).update(data).then(()=>{
-            return data;
+        console.log("-pf",data)
+
+        return db("users_days").where({user_id,date}).update(data).then(()=>{
+            return {...data,goal};
         });
     })
 }

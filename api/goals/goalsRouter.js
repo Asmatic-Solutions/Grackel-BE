@@ -15,13 +15,13 @@ const Goals = require("./goalsModel");
 
 //CREATE new goal
 router.post("/",goalValidation,(req,res)=>{ 
-    getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
+    getIDbyusername(req.headers.authorization).then(({id})=>{  // Retrive ID by the username provided in the token 
+        Goals.getGoal(id).then(data=>{ //Check if the ID already has a goal set up
             if(data.goal!=null)
                 res.status(200).json({Message:"Goals has already been set"})
             else
-                Goals.createGoal(req.body.goal,ID).then(({Goal})=>{ // Pass the ID and the goal
-                    res.status(201).json({message:"Goal created succesfully",Goal})
+                Goals.createGoal(req.body.goal,ID).then(({goal})=>{ // Pass the ID and the goal
+                    res.status(201).json({message:"Goal created succesfully",goal})
                 }).catch(err=>{
                     console.log(err);
                     res.status(500).json({message:"Error creating goal"})
@@ -32,10 +32,10 @@ router.post("/",goalValidation,(req,res)=>{
 
 //DELETE goal
 router.delete("/",(req,res)=>{
-    getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
+    getIDbyusername(req.headers.authorization).then(({id})=>{  // Retrive ID by the username provided in the token 
+        Goals.getGoal(id).then(data=>{ //Check if the ID already has a goal set up
             if(data)    
-                Goals.deleteGoal(ID).then(()=>{
+                Goals.deleteGoal(id).then(()=>{
                     res.status(200).json({message:"Removed goal succesfully"})
                 }).catch(err=>{
                     console.log(err);
@@ -48,10 +48,10 @@ router.delete("/",(req,res)=>{
 })
 //PUT goal
 router.put("/",goalValidation,(req,res)=>{
-    getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        Goals.getGoal(ID).then(data=>{ //Check if the ID already has a goal set up
+    getIDbyusername(req.headers.authorization).then(({id})=>{  // Retrive ID by the username provided in the token 
+        Goals.getGoal(id).then(data=>{ //Check if the ID already has a goal set up
             if(data!=null)    
-                Goals.updateGoal(ID,req.body.goal).then(goal=>{
+                Goals.updateGoal(id,req.body.goal).then(goal=>{
                     res.status(200).json({message:"Updated goal succesfully",goal})
                 }).catch(err=>{
                     console.log(err);
@@ -65,9 +65,9 @@ router.put("/",goalValidation,(req,res)=>{
 
 //GET Goal
 router.get("/",(req,res)=>{
-    getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        Goals.getGoal(ID).then((data)=>{ //Check if the ID already has a goal set up
-            if(data.Goal!=null)    
+    getIDbyusername(req.headers.authorization).then(({id})=>{  // Retrive ID by the username provided in the token 
+        Goals.getGoal(id).then((data)=>{ //Check if the ID already has a goal set up
+            if(data.goal!=null)    
                 res.status(200).json(data);
             else
                 res.status(200).json({Message:"No goal data was found linked with the specified ID"})
@@ -80,21 +80,21 @@ router.get("/",(req,res)=>{
 
 /* Daily endpoints */
 router.get("/daily",(req,res)=>{
-    getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
+    getIDbyusername(req.headers.authorization).then(({id})=>{  // Retrive ID by the username provided in the token 
         //Check for goal....
-        Goals.getDaily(ID).then(data=>{
+        Goals.getDaily(id).then(data=>{
             if(data)
                 res.status(200).json(data);
             else{
-                return addDaily(ID,req.body.count) 
+                return addDaily(id,req.body.count) 
             }
         })
     })
 })
 
 router.post("/daily",dailyValidation,(req,res)=>{ //This is basically updating the daily goal aka adding to the total
-    getIDbyusername(req.headers.authorization).then(({ID})=>{  // Retrive ID by the username provided in the token 
-        return addDaily(ID,req.body.count, res)
+    getIDbyusername(req.headers.authorization).then(({id})=>{  // Retrive ID by the username provided in the token 
+        return addDaily(id,req.body.count, res)
     })
 })
 
@@ -122,13 +122,13 @@ function dailyValidation(req,res,next){
 
 function getIDbyusername(token){
     const {username} = jwt.verify(token,secret);
-    return db("Users").select("ID").where({"Username":username}).first().then((id)=>{
+    return db("users").select("id").where({username}).first().then((id)=>{
         return id;
     })
 }
 
-function addDaily(ID,count,res){
-    Goals.addDaily(ID, count).then(data=>{
+function addDaily(id,count,res){
+    Goals.addDaily(id, count).then(data=>{
         return res.status(201).json(data)
     }).catch(err=>{
         console.log(err)
