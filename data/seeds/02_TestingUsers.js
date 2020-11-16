@@ -5,7 +5,7 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       const date = new Date().toISOString();
-      return knex('Users').insert([
+      return knex('users').insert([
         {
         "id":1,
         "username":"MrR3set",
@@ -17,7 +17,7 @@ exports.seed = function(knex) {
         },
         {
         "id":2,
-        "isername":"Sarah",
+        "username":"Sarah",
         "password":"$2b$08$.3a26tb525suKvOTrAvup.sLEkHer6s7S5Y1TZkJ0h7L1ofz7Q9ii",
         "email":"n@n.com",
         "created_at":date,
@@ -26,7 +26,7 @@ exports.seed = function(knex) {
         },
         {
         "id":3,
-        "isername":"Joseph",
+        "username":"Joseph",
         "password":"$2b$08$.3a26tb525suKvOTrAvup.sLEkHer6s7S5Y1TZkJ0h7L1ofz7Q9ii",
         "email":"n@n.com",
         "created_at":date,
