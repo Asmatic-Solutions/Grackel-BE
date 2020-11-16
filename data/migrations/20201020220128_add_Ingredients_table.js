@@ -1,13 +1,13 @@
 
 exports.up = function(knex) {
-  return knex.schema.createTable("Ingredients", Ingredients => {
-    Ingredients.integer("ID").index();
-    Ingredients.string("Name").notNullable().index();
-    Ingredients.string("Category").notNullable();
-    Ingredients.jsonb("Nutrition_facts").notNullable();
+  return knex.schema.createTable("ingredients", ingredients => {
+    ingredients.integer("id").index();
+    ingredients.string("name").notNullable().index();
+    ingredients.string("category").notNullable();
+    ingredients.jsonb("nutrition_facts").notNullable();
   })
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists("Ingredients")
+  return knex.schema.dropTableIfExists("ingredients")
 };

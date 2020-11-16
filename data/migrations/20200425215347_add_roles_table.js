@@ -1,11 +1,11 @@
 
 exports.up = function(knex) {
-    return knex.schema.createTable("Roles",Roles=>{
-        Roles.increments("ID",1).index();
-        Roles.string("Role",32).notNullable();
+    return knex.schema.createTable("roles",roles=>{
+        roles.increments("id",1).index();
+        roles.string("role",32).notNullable();
     })
 };
 
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists("Roles");
+    return knex.schema.dropTableIfExists("roles");
 };

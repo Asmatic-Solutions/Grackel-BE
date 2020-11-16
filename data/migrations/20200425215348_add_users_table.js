@@ -1,22 +1,22 @@
 
 exports.up = function(knex) {
-  return knex.schema.createTable("Users",Users=>{
-    Users.increments("ID").index();
-    Users.string("Username",50).notNullable().index().unique();
-    Users.string("Password",255).notNullable();
-    Users.string("Email").notNullable();
-    Users.datetime("Created_at");
-    Users.datetime("Lastconnection_at");
-    Users.integer("Goal",4).defaultsTo(2000);
-    Users.integer("Role_ID",1)
+  return knex.schema.createTable("users",users=>{
+    users.increments("id").index();
+    users.string("username",50).notNullable().index().unique();
+    users.string("password",255).notNullable();
+    users.string("email").notNullable();
+    users.datetime("created_at");
+    users.datetime("lastconnection_at");
+    users.integer("goal",4).defaultsTo(2000);
+    users.integer("role_id",1)
       .notNullable()
-      .references("ID")
-      .inTable("Roles")
+      .references("id")
+      .inTable("roles")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
   })
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists("Users");
+  return knex.schema.dropTableIfExists("users");
 };
