@@ -61,16 +61,12 @@ function addDaily(user_id,DailyCount){
 }
 
 function updateDaily(data, DailyCount){
-
     const {user_id,date} = data;
-
     return getGoal(user_id).then(({goal})=>{ // Get goal from the user.
         data.daily_count += DailyCount; // Updates the daily count with the one passed by the user
         if(goal<data.daily_count){
             data.success = false; //Checks if goal has been reached
         }
-        console.log("-pf",data)
-
         return db("users_days").where({user_id,date}).update(data).then(()=>{
             return {...data,goal};
         });
