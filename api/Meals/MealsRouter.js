@@ -53,20 +53,18 @@ module.exports = router;
 
 function mealValidation(req,res,next){
     if(!(req.body.type))
-        return res.status(403).json({message:"Missing type of meal"})
+        return res.status(400).json({message:"Missing type of meal"})
     
         if(req.body.manual){ // Verify manual meal mode
             if (!(req.body.manual_ingredients) || req.body.manual_ingredients.length<=0) // Check for manual_Ingredients array
-                return res.status(403).json({message:"Missing manual ingredients array or array is empty"})
-
+                return res.status(400).json({message:"Missing manual ingredients array or array is empty"})
             const {manual_ingredients} = req.body
             // Check for good format on manual ingredients
             manual_ingredients.forEach(ingredient => {
                 if (!(ingredient.name))
-                    return res.status(403).json({message:"Manual ingredients must have a name"})
+                    return res.status(400).json({message:"Manual ingredients must have a name"})
             });  
         }
-
     next();
 }
 
