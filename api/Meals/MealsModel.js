@@ -2,37 +2,39 @@ const db = require("../../data/db-config");
 module.exports = {
     createManualMeal,
     getLastMealsFrom,
-    getMealOn
+    getMealOn,
 }
 
 function createManualMeal(meal){
     const date = new Date().toISOString();
-    meal = {Date:date,...meal,Manual_Ingredients:JSON.stringify(convertManualIngredients(meal.Manual_Ingredients))}
-    return db("Meals_Users").insert(meal).then(()=>{
-        return getLastMeal(meal.User_ID)
+    meal = {date:date,...meal,manual_ingredients:JSON.stringify(convertManualIngredients(meal.manual_ingredients))}
+    return db("meals_users").insert(meal).then(()=>{
+        return getLastMeal(meal.user_id)
     })
 }
 
-function getLastMeal(User_ID){
-    return db("Meals_Users").orderBy("Date","desc").select("*").where({User_ID}).limit(1).first().then(data=>{
+function getLastMeal(user_id){
+    return db("meals_users").orderBy("date","desc").select("type", "date", "manual", "manual_ingredients").where({user_id}).limit(1).first().then(data=>{
         // Check if its manual mode, if so simply return data
-        if (!data.Manual)
+        if (!data.manual)
             console.log("Not manual mode not yet implemented")
         return data
     })
 }
-function getLastMealsFrom(User_ID,time=1,timePeriod="week"){
-    return db("Meals_Users").select("*")
-    .where(db.raw(`\"Date\" > now() - interval '${time} ${timePeriod}'`))
-    .andWhere({User_ID}).then(data=>{
+function getLastMealsFrom(user_id,time=1,timePeriod="week"){
+    return db("meals_users").select("type", "date", "manual", "manual_ingredients")
+    .where(db.raw(`\"date\" > now() - interval '${time} ${timePeriod}'`))
+    .andWhere({user_id}).orderBy("date","desc")
+    
+    .then(data=>{
         return data
     })
 }
 
-function getMealOn(User_ID,date){
-    return db("Meals_Users").select("*")
-    .where(db.raw(`\"Date\"::date = '${date}'::date`))
-    .andWhere({User_ID}).then(data=>{
+function getMealOn(user_id,date){
+    return db("meals_users").select("type", "date", "manual", "manual_ingredients")
+    .where(db.raw(`\"date\"::date = '${date}'::date`))
+    .andWhere({user_id}).then(data=>{
         return data
     })
 }

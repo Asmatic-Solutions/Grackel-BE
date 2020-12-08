@@ -1,16 +1,16 @@
-const Ingredients = require("./Assets/Ingredients")
+const ingredients = require("./Assets/Ingredients")
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('Ingredients').del()
+  return knex('ingredients').del()
     .then(function () {
       // Inserts seed entries
-      return knex('Ingredients').insert(addIDs(Ingredients));
+      return knex('ingredients').insert(addIDs(ingredients));
     });
 };
 
-function addIDs(Ingredients){
+function addIDs(ingredients){
   let id=1;
-  return Ingredients.map(product=>{
-    return {ID:id++,...product,Nutrition_facts:JSON.stringify(product.Nutrition_facts)}
+  return ingredients.map(product=>{
+    return {id:id++,...product,nutrition_facts:JSON.stringify(product.nutrition_facts)}
   })
 }

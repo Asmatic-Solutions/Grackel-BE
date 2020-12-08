@@ -12,15 +12,15 @@ router.post("/register",userValidation,(req,res)=>{
         return res.status(403).send({message:"Please provide Email"}); // I wanted to include this into userValidation, but that would simply mess with that method being use in /login
     }
     const credentials = req.body;
-    Users.getUserBy({"Username":credentials.username}).then((data)=>{
+    Users.getUserBy({"username":credentials.username}).then((data)=>{
         if(data){ //Check if user already exists
-            return res.status(202).send({message:"User already exists"}); 
+            return res.status(202).send({message:"user already exists"}); 
         }else{
             credentials.password = bcrypt.hashSync(credentials.password, process.env.ROUNDS || 8); // Hash password
             // Create new user with the updated credentials (hashed password)
-            Users.createUser(credentials).then(User=>{
-                Users.getUserByID(User.ID).then(data=>{
-                    data?res.status(201).json(data):res.status(500).json({message:"User was not created"})
+            Users.createUser(credentials).then(user=>{
+                Users.getUserByID(user.id).then(data=>{
+                    data?res.status(201).json(data):res.status(500).json({message:"user was not created"})
                 })
             }).catch(error=>{
                 console.log(error);
@@ -33,8 +33,8 @@ router.post("/register",userValidation,(req,res)=>{
 //Login
 router.post("/login",userValidation,(req,res)=>{
     const {username,password} = req.body;
-    Users.getUserBy({"Username":username}).then(user=>{
-        if(user && bcrypt.compareSync(password, user.Password)){
+    Users.getUserBy({username}).then(user=>{
+        if(user && bcrypt.compareSync(password, user.password)){
             const token = generateToken(user);
             res.status(200).json({message:"Authorized", token})
         }else{
@@ -54,8 +54,8 @@ function userValidation(req,res,next){
 
 function generateToken(user){
     const payload = {
-        username:user.Username,
-        email:user.Email,
+        username:user.username,
+        email:user.email,
     }
     const options = {
         expiresIn:"14d"

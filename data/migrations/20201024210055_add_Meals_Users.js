@@ -1,21 +1,21 @@
 
 exports.up = function(knex) {
-    return knex.schema.createTable("Meals_Users", Meals_Users => {
-      Meals_Users.increments("ID").index();
-      Meals_Users.string("Type").notNullable().index();
-      Meals_Users.datetime("Date").notNullable();
-      Meals_Users.boolean("Manual").notNullable(); //Wether it is fully manual or not
-      Meals_Users.jsonb("Manual_Ingredients")
-      Meals_Users.integer("User_ID")
+    return knex.schema.createTable("meals_users", meals_users => {
+      meals_users.increments("id").index();
+      meals_users.string("type").notNullable().index();
+      meals_users.datetime("date").notNullable();
+      meals_users.boolean("manual").notNullable(); //Wether it is fully manual or not
+      meals_users.jsonb("manual_ingredients")
+      meals_users.integer("user_id")
       .notNullable()
-      .references("ID")
-      .inTable("Users")
+      .references("id")
+      .inTable("users")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
     })
   };
   
   exports.down = function(knex) {
-    return knex.schema.dropTableIfExists("Meals_Users")
+    return knex.schema.dropTableIfExists("meals_users")
   };
   

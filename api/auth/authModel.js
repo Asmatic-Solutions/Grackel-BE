@@ -6,34 +6,34 @@ module.exports = {
     getIDByUsername
 }
 
-function getUserByID(ID){
-    return db("Users")
-        .join("Roles", function(){
-            this.on("Users.Role_ID", "=", "Roles.ID")
+function getUserByID(id){
+    return db("users")
+        .join("roles", function(){
+            this.on("users.role_id", "=", "roles.id")
         })
-        .where({"Users.ID":ID})
-        .select("Users.ID","Username", "Email", "Created_at", "Lastconnection_at", "Role")
+        .where({"users.id":id})
+        .select("users.id","username", "email", "created_at", "lastconnection_at", "role")
         .first()
 }
 
-function getIDByUsername(Username){
-    return db("Users").where({Username}).select("ID").first()
+function getIDByUsername(username){
+    return db("users").where({username}).select("id").first()
 }
 
 function getUserBy(filter){
-    return db("Users").where(filter).select("*").first()
+    return db("users").where(filter).select("*").first()
 }
 
 function createUser(credentials){
     const date = new Date().toISOString();
-    return db("Users")
-    .insert(
-    {"Username":credentials.username,
-    "Password":credentials.password,
-    "Email":credentials.email,
-    "Created_at":date,
-    "Lastconnection_at":date,
-    "Role_ID":2
+    return db("users")
+    .insert({
+        username:credentials.username,
+        password:credentials.password,
+        email:credentials.email,
+        created_at:date,
+        lastconnection_at:date,
+        role_id:2
     }).then(data=>{
         return getIDByUsername(credentials.username)
     });

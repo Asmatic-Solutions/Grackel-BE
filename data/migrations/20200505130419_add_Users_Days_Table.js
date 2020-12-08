@@ -1,19 +1,19 @@
 
 exports.up = function(knex) {
-    return knex.schema.createTable("User_Days",User_Days=>{
-        User_Days.integer("User_ID")
+    return knex.schema.createTable("users_days",users_days=>{
+        users_days.integer("user_id")
           .notNullable()
-          .references("ID")
-          .inTable("Users")
+          .references("id")
+          .inTable("users")
           .onUpdate("CASCADE")
           .onDelete("CASCADE");
-        User_Days.date("Date").notNullable();
-        User_Days.boolean("Success").defaultsTo(true);
-        User_Days.integer("DailyCount",4).defaultsTo(0);
-        User_Days.primary(["User_ID","Date"]); //Sets a composite key with Date and GoalID
+        users_days.date("date").notNullable();
+        users_days.boolean("success").defaultsTo(true);
+        users_days.integer("daily_count",4).defaultsTo(0);
+        users_days.primary(["user_id","date"]); //Sets a composite key with Date and GoalID
       })
 };
 
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists("User_Days")
+    return knex.schema.dropTableIfExists("users_days")
 };
